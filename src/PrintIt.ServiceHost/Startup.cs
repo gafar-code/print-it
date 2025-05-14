@@ -15,10 +15,22 @@ namespace PrintIt.ServiceHost
 
             services.AddRouting();
             services.AddControllers();
+            
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll", builder =>
+                {
+                    builder.AllowAnyOrigin()
+                           .AllowAnyMethod()
+                           .AllowAnyHeader();
+                });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostEnvironment env)
         {
+            app.UseCors("AllowAll");
+            
             app.UseRouting();
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
